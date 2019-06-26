@@ -82,19 +82,6 @@ pub(crate) fn impls_for_trait_query(
     impls.into_iter().collect::<Vec<_>>().into()
 }
 
-fn solve(
-    db: &impl HirDatabase,
-    krate: Crate,
-    goal: &chalk_ir::UCanonical<chalk_ir::InEnvironment<chalk_ir::Goal>>,
-) -> Option<chalk_solve::Solution> {
-    let context = ChalkContext { db, krate };
-    let solver = db.solver(krate);
-    debug!("solve goal: {:?}", goal);
-    let solution = solver.lock().solve_with_fuel(&context, goal, Some(1000));
-    debug!("solve({:?}) => {:?}", goal, solution);
-    solution
-}
-
 /// A set of clauses that we assume to be true. E.g. if we are inside this function:
 /// ```rust
 /// fn foo<T: Default>(t: T) {}
